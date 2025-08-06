@@ -1,0 +1,92 @@
+##Simulate data on lil
+
+sales_data <- data.frame(
+  day = 1:30,
+  jars_fish <- c(32, 36, 34, 30, 31, 33, 35, 36, 32, 34, 30, 29, 33, 31, 32, 36, 37, 35, 34, 33, 30, 32, 31, 30, 33, 34, 35, 36, 37, 32),
+  jars_garlic <- c(28, 27, 26, 30, 31, 28, 27, 29, 30, 31, 32, 30, 31, 33, 32, 34, 33, 32, 30, 29, 28, 30, 31, 33, 32, 34, 36, 35, 36, 33)
+  )
+mean(sales_data$jars_fish) ##daily sales
+mean(sales_data$jars_garlic)
+sd(sales_data$jars_fish)
+sd(sales_data$jars_garlic)
+summary(sales_data$jars_fish)
+summary(sales_data$jars_garlic)
+-----------------------------------------------------------------------------------------------------------------------------
+##graph and plot
+  
+par(mfrow = c(1, 2))
+  hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold")
+  hist(sales_data$jars_garlic, col = "red", main = "Jar garlic Sales", xlab = "Jars Sold")
+  par(mfrow = c(1, 1))
+##
+  
+boxplot(sales_data$jars_fish, sales_data$jars_garlic, names = c("Jar fish", "Jar garlic"), main = "Boxplot of Daily Jar Sales", col = c("blue", "red"), ylab = "Jars Sold")
+##
+
+plot(sales_data$day, sales_data$jars_fish, type = "b", col = "blue", ylim = c(min(sales_data), max(sales_data)), main = "Daily Sales Over Time", ylab = "Jars Sold", xlab = "Day")
+  lines(sales_data$day, sales_data$jars_garlic, type = "b", col = "red")
+  legend("bottomleft", c("Jar_fish","Jar_garlic") ,legend = c("Jar fish", "Jar garlic"), col = c("blue", "red"), lty = 1, pch = 1)
+------------------------------------------------------------------------------------------------------------------------------
+##hypothesis test,      null  hypo:   u_A =  u_B
+##                alternative hypo:   u_A != u_B
+## Reject null if p-value < 0.05
+    
+t.test(sales_data$jars_fish,sales_data$jars_garlic, paired = TRUE) ##manual type, no copy paste
+  
+  ##Planning for the future using retrieved data
+  ##T suggest how large is the sales diff mean between A(fish) and B(garlic).
+------------------------------------------------------------------------------------------------------------------------------------------------------------  
+##F-test, F=jar_fish/jar_garlic, F mean how spread is jar_fish then jar_garlic, Reject null if p-value < 0.05
+    
+var.test(sales_data$jars_fish, sales_data$jars_garlic)             ##manual type, no copy paste
+  
+  ##Planning for the future using retrieved data
+  ##we now know how spread is A then B. Q: do weekend having more sales on jar_A or B? delivery issue? customer favor and variation?
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 95% CI for jars_fish&garlic
+    
+length(sales_data$jars_fish)
+x_bar_fish <- mean(sales_data$jars_fish)
+sd_fish <- sd(sales_data$jars_fish)
+error_fish <- qt(0.975, df = length(sales_data$jars_fish) - 1) * sd_fish / sqrt(length(sales_data$jars_fish))
+c(x_bar_fish - error_fish, x_bar_fish + error_fish)
+  
+length(sales_data$jars_garlic)
+x_bar_garlic <- mean(sales_data$jars_garlic)
+sd_garlic <- sd(sales_data$jars_garlic)
+error_garlic <- qt(0.975, df = length(sales_data$jars_garlic) - 1) * sd_garlic / sqrt(length(sales_data$jars_garlic))
+c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic)
+
+print(error_fish)
+print(c(x_bar_fish - error_fish, x_bar_fish + error_fish))
+print(error_garlic)
+print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic))
+-------------------------------------------------------------------------------------------------------------------------------
+##Bias, ing
+  
+true_mean_fish <- 30
+true_mean_garlic <- 30
+bias_fish <- x_bar_fish - true_mean_fish
+bias_garlic <- x_bar_garlic - true_mean_garlic
+cat("Bias for Jar fish:", bias_fish, "\n")
+cat("Bias for Jar garlic:", bias_garlic, "\n")
+
+##bias >0, sales higher than expect
+##bias =0, what we expected
+##bias <0, sales lower than expect
+-------------------------------------------------------------------------------------------------------------------------------
+##chi-sq test
+##goodness of fit, null hypo : u_A  = u_B
+##          alternative hypo : u_A != u_B
+  
+observed_fish <- sales_data$jars_fish
+expected_fish <- rep(mean(observed_fish), length(observed_fish))
+chisq.test(x = observed_fish, p = expected_fish / sum(expected_fish))
+
+observed_garlic <- sales_data$jars_garlic
+expected_fish <- rep(mean(observed_garlic), length(observed_garlic))
+chisq.test(x = observed_garlic, p = expected_garlic / sum(expected_garlic))
+
+##chi-sq >0, 
+##chi-sq <0, 
+-------------------------------------------------------------------------------------------------------------------------------
