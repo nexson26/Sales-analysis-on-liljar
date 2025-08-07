@@ -1,4 +1,4 @@
-##Simulate data on lil
+##Simulate data on lil, data are simulate, not real data.
 
 sales_data <- data.frame(
   day = 1:30,
