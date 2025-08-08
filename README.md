@@ -1,4 +1,4 @@
-## Simulate Data on Lil’ Jar in R Program
+## Simulate Data on Lil’ Jar in R Program (code is still developing)
 Data are simulated, not real data.
 
 Lil’ Jar
