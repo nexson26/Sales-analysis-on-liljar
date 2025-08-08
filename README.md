@@ -1,5 +1,6 @@
 ## Simulate Data on Lil’ Jar in R Program (code is still developing)
 Data are simulated, not real data.
+Tools: R-program
 
 Lil’ Jar
 Food & Drink
@@ -7,3 +8,4 @@ Food & Drink
 📍 Penang, Malaysia.
 🫱🏻‍🫲🏼 Wholesale available for cafés and restaurants.
 Instagram: https://www.instagram.com/liljar_05/
+
