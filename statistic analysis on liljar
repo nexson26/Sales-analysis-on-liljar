@@ -87,6 +87,6 @@ observed_garlic <- sales_data$jars_garlic
 expected_fish <- rep(mean(observed_garlic), length(observed_garlic))
 chisq.test(x = observed_garlic, p = expected_garlic / sum(expected_garlic))
 
-##chi-sq >0, 
-##chi-sq <0, 
+## If p-value < 0.05, reject H0 → observed counts differ significantly from expected counts.
+## If p-value ≥ 0.05, fail to reject H0 → no significant difference from expected counts.
 -------------------------------------------------------------------------------------------------------------------------------
