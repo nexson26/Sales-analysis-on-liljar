@@ -1,4 +1,4 @@
-##Simulate data on lil
+##Simulate data on lil,they are not real dataset.
 
 sales_data <- data.frame(
   day = 1:30,
@@ -7,7 +7,7 @@ sales_data <- data.frame(
   )
 mean(sales_data$jars_fish) ##daily sales
 mean(sales_data$jars_garlic)
-sd(sales_data$jars_fish)
+sd(sales_data$jars_fish) ##Standard deviation
 sd(sales_data$jars_garlic)
 summary(sales_data$jars_fish)
 summary(sales_data$jars_garlic)
@@ -33,17 +33,23 @@ plot(sales_data$day, sales_data$jars_fish, type = "b", col = "blue", ylim = c(mi
     
 t.test(sales_data$jars_fish,sales_data$jars_garlic, paired = TRUE) ##manual type, no copy paste
   
-  ##Planning for the future using retrieved data
-  ##T suggest how large is the sales diff mean between A(fish) and B(garlic).
+##T suggest how large is the sales diff mean between A(fish) and B(garlic).
 ------------------------------------------------------------------------------------------------------------------------------------------------------------  
-##F-test, F=jar_fish/jar_garlic, F mean how spread is jar_fish then jar_garlic, Reject null if p-value < 0.05
+##F-test, F=jar_fish/jar_garlic, F mean how stable are jar_fish and jar_garlic on daily sales.
+##                      null  hypo:   sigma^2_fish =  sigma^2_garlic
+##                alternative hypo:   sigma^2_fish != sigma^2_garlic
     
 var.test(sales_data$jars_fish, sales_data$jars_garlic)             ##manual type, no copy paste
   
-  ##Planning for the future using retrieved data
-  ##we now know how spread is A then B. Q: do weekend having more sales on jar_A or B? delivery issue? customer favor and variation?
+## If p-value < 0.05, reject H0, Jar_fish and Jar_garlic have significantly different variances.
+## If p-value ≥ 0.05, fail to reject H0, no significant difference in variance between them.
+  
+  sd(sales_data$jars_fish)   ##higher value tell higher fluctuation
+  sd(sales_data$jars_garlic) ##higher value tell higher fluctuation
+  
+##We can compare which one has more stability(variance) then other one.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
-# 95% CI for jars_fish&garlic
+# 95% CI for jars_fish&garlic, (95%->0.975 || 99% ->0.995 || 90% -> 0.95)
     
 length(sales_data$jars_fish)
 x_bar_fish <- mean(sales_data$jars_fish)
@@ -65,9 +71,9 @@ print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic))
 ## We have 95% confident believe true mean daily sales of fish_jar lies between " print(c(x_bar_fish - error_fish, x_bar_fish + error_fish)) " value.
 ## We have 95% confident believe true mean daily sales of garlic_jar lies between " print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic)) "
 -------------------------------------------------------------------------------------------------------------------------------
-##Bias,
+##Bias
   
-true_mean_fish <- 30
+true_mean_fish <- 30           #the first day sales until today for both true mean(fish and garlic)
 true_mean_garlic <- 30
 bias_fish <- x_bar_fish - true_mean_fish
 bias_garlic <- x_bar_garlic - true_mean_garlic
@@ -82,14 +88,26 @@ cat("Bias for Jar garlic:", bias_garlic, "\n")
 ## H0: Observed sales follow a uniform distribution (no deviation from expected).
 ## H1: Observed sales do not follow a uniform distribution.
   
-## Fish sales
+##Jar_Fish sales
 observed_fish <- sales_data$jars_fish
 chisq.test(observed_fish)
 
-##Garlic sales
+##Jar_Garlic sales
 observed_garlic <- sales_data$jars_garlic
 chisq.test(observed_garlic)
 
 ## If p-value < 0.05, reject H0, sales are not uniformly distributed.
 ## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
 -------------------------------------------------------------------------------------------------------------------------------
+##Number of returns on goods (Poisson distribution is being used here because events are independent)
+
+lambda <- 5 ##Average return rate
+dpois(0:10, lambda) ##Prob of the rate getting return with 0,...,10 in a day
+returns <- rpois(30, lambda) #Simulate 30 days of returns
+mean(returns) ##average daily returns observed
+var(returns) ##sqrt(var(return)) is the value of get return w/ more details, mean +- sqrt(var)
+hist(returns, col="red", main="Daily Returns", xlab="Returns per Day")
+
+## When the number of returns is higher than average, it may indicate a recent issue such as product defect e.t.c.
+-------------------------------------------------------------------------------------------------------------------------------
+##
