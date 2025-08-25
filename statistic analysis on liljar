@@ -75,18 +75,18 @@ cat("Bias for Jar garlic:", bias_garlic, "\n")
 ##bias =0, what we expected
 ##bias <0, sales lower than expect
 -------------------------------------------------------------------------------------------------------------------------------
-##chi-sq test
-##goodness of fit, null hypo : u_A  = u_B
-##          alternative hypo : u_A != u_B
+## Chi-squared test: Goodness of Fit
+## H0: Observed sales follow a uniform distribution (no deviation from expected).
+## H1: Observed sales do not follow a uniform distribution.
   
+## Fish sales
 observed_fish <- sales_data$jars_fish
-expected_fish <- rep(mean(observed_fish), length(observed_fish))
-chisq.test(x = observed_fish, p = expected_fish / sum(expected_fish))
+chisq.test(observed_fish)
 
+##Garlic sales
 observed_garlic <- sales_data$jars_garlic
-expected_fish <- rep(mean(observed_garlic), length(observed_garlic))
-chisq.test(x = observed_garlic, p = expected_garlic / sum(expected_garlic))
+chisq.test(observed_garlic)
 
-## If p-value < 0.05, reject H0 → observed counts differ significantly from expected counts.
-## If p-value ≥ 0.05, fail to reject H0 → no significant difference from expected counts.
+## If p-value < 0.05, reject H0, sales are not uniformly distributed.
+## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
 -------------------------------------------------------------------------------------------------------------------------------
