@@ -119,8 +119,6 @@ hist(returns_fish, col="blue", main="Daily Returns_fish", xlab="Returns per Day"
 hist(returns_garlic,col="red", main="Daily Returns_garlic", xlab="Returns per Day")
 par(mfrow = c(1, 1)) 
 
-lambda <- mean(sales_data$returns)  # actual average daily returns
-
 par(mfrow=c(1,2))
 hist(sales_data$jars_return_fish, col="blue", main="Daily Fish Returns", xlab="Number of Returns") ##Return rate based on actual case
 hist(sales_data$jars_return_garlic, col="red", main="Daily Garlic Returns", xlab="Number of Returns")
