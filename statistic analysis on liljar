@@ -103,13 +103,29 @@ chisq.test(observed_garlic)
 -------------------------------------------------------------------------------------------------------------------------------
 ##Number of returns on goods (Poisson distribution is being used here because events are independent)
 
-lambda <- 5 ##Average return rate
-dpois(0:10, lambda) ##Prob of the rate getting return with 0,...,10 in a day
-returns <- rpois(30, lambda) #Simulate 30 days of returns
-mean(returns) ##average daily returns observed
-var(returns) ##sqrt(var(return)) is the value of get return w/ more details, mean +- sqrt(var)
-hist(returns, col="red", main="Daily Returns", xlab="Returns per Day")
+lambda_fish <- c(sales_data$jars_return_fish....c.0..0..1..4..0..0..1..1..0..0..0..1..0..) ##Average return rate
+lambda_garlic <- c(sales_data$jars_return_garlic....c.0..1..0..0..0..0..4..0..0..2..0..8..0..)
+dpois(0:10, lambda_fish) ##Prob of the rate getting return with 0,...,10 in a day
+dpois(0:10, lambda_garlic)
+returns_fish <- rpois(30, lambda_fish) #Simulate 30 days of returns w/ random distribution, which mean it's used for prediction.
+returns_garlic <- rpois(30, lambda_garlic)
+mean(returns_fish) ##average daily returns observed
+mean(returns_garlic)
+var(returns_fish) ##sqrt(var(return)) is the value of get return w/ more details, mean +- sqrt(var)
+var(returns_garlic)
 
-## When the number of returns is higher than average, it may indicate a recent issue such as product defect e.t.c.
+par(mfrow = c(1, 2))
+hist(returns_fish, col="blue", main="Daily Returns_fish", xlab="Returns per Day") ##prediction based on lambda_fish and garlic
+hist(returns_garlic,col="red", main="Daily Returns_garlic", xlab="Returns per Day")
+par(mfrow = c(1, 1)) 
+
+lambda <- mean(sales_data$returns)  # actual average daily returns
+
+par(mfrow=c(1,2))
+hist(sales_data$jars_return_fish, col="blue", main="Daily Fish Returns", xlab="Number of Returns") ##Return rate based on actual case
+hist(sales_data$jars_return_garlic, col="red", main="Daily Garlic Returns", xlab="Number of Returns")
+par(mfrow=c(1,1))
+
+## When the number of returns is higher than average, it may indicate a recent issue such as product defect or might have issue with the origin of the goods e.t.c.
 -------------------------------------------------------------------------------------------------------------------------------
 ##
