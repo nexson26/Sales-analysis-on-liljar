@@ -1,4 +1,4 @@
-##Simulate data on liljar on Rprogram. Data are simulate, not real data.
+##Simulate data on lil
 
 sales_data <- data.frame(
   day = 1:30,
@@ -61,8 +61,11 @@ print(error_fish)
 print(c(x_bar_fish - error_fish, x_bar_fish + error_fish))
 print(error_garlic)
 print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic))
+
+## We have 95% confident believe true mean daily sales of fish_jar lies between " print(c(x_bar_fish - error_fish, x_bar_fish + error_fish)) " value.
+## We have 95% confident believe true mean daily sales of garlic_jar lies between " print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic)) "
 -------------------------------------------------------------------------------------------------------------------------------
-##Bias, ing
+##Bias,
   
 true_mean_fish <- 30
 true_mean_garlic <- 30
@@ -87,7 +90,6 @@ chisq.test(observed_fish)
 observed_garlic <- sales_data$jars_garlic
 chisq.test(observed_garlic)
 
-##If p-value < 0.05, reject H0. Sales are not uniformly distributed. This means daily sales amounts differ significantly, possibly due to factors such as specific locations, weekdays, or weather conditions that increase demand.  
-
-## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution. It means no significant difference in daily sales.
+## If p-value < 0.05, reject H0, sales are not uniformly distributed.
+## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
 -------------------------------------------------------------------------------------------------------------------------------
