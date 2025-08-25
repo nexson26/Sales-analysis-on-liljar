@@ -14,7 +14,7 @@ sd(sales_data$jars_garlic)
 summary(sales_data$jars_fish)
 summary(sales_data$jars_garlic)
 -----------------------------------------------------------------------------------------------------------------------------
-##graph and plot
+##graph and plot, there might be error with copy paste, manual type.
   
 par(mfrow = c(1, 2))
   hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold")
