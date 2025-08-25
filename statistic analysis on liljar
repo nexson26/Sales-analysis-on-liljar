@@ -87,6 +87,7 @@ chisq.test(observed_fish)
 observed_garlic <- sales_data$jars_garlic
 chisq.test(observed_garlic)
 
-## If p-value < 0.05, reject H0, sales are not uniformly distributed.
-## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
+##If p-value < 0.05, reject H0. Sales are not uniformly distributed. This means daily sales amounts differ significantly, possibly due to factors such as specific locations, weekdays, or weather conditions that increase demand.  
+
+## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution. It means no significant difference in daily sales.
 -------------------------------------------------------------------------------------------------------------------------------
