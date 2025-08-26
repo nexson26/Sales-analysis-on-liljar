@@ -11,7 +11,7 @@ mean(sales_data$jars_fish) ##daily sales
 mean(sales_data$jars_garlic)
 sd(sales_data$jars_fish) ##Standard deviation
 sd(sales_data$jars_garlic)
-summary(sales_data$jars_fish) ##show IQR,median,mean
+summary(sales_data$jars_fish) ##show IQR,mean,min,max
 summary(sales_data$jars_garlic)
 -----------------------------------------------------------------------------------------------------------------------------
 ##graph and plot, there might be error with copy paste, if there's please try type manually.
