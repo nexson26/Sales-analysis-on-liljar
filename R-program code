@@ -97,7 +97,7 @@ chisq.test(sales_data$jars_fish)
 chisq.test(sales_data$jars_garlic)
 
 ## If p-value < 0.05, reject H0, sales are not uniformly distributed. It indicates maybe the sales are not random, and some days or outcomes are significantly different from others. So we can answer question like "Do sales spike on weekends and drop on weekdays?" e.t.c.
-## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution. This indicates that we do not provide sufficient evidence to conclude that sales are anything but uniformly distributed. Example) Let's say we have promotion here and we get this result, so we can say that we data did not provide enough evidence to conclude that the promotion had a statistically significant effect.
+## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution. This indicates that we do not provide sufficient evidence to conclude that sales are anything but uniformly distributed. Example) Let's say we have promotion here and we get this result, so we can say that our data did not provide enough evidence to conclude that the promotion had a statistically significant effect.
 -------------------------------------------------------------------------------------------------------------------------------
 ##Number of returns on goods (Poisson distribution is being used here because events are independent)
 
