@@ -1,28 +1,33 @@
-##The data are simulated and not real dataset.
+##Simulate data on lil,these are not real dataset.
 
-sales_data <- data.frame(
+sales_data = data.frame(
   day = 1:30,
-  jars_fish <- c(32,36,34,30,31,33,35,36,32,34,30,29,33,31,32,36,37,35,34,33,30,32,31,30,33,34,35,36,37,32),
-  jars_garlic <- c(28,27,26,30,31,28,27,29,30,31,32,30,31,33,32,34,33,32,30,29,28,30,31,33,32,34,36,35,36,33),
-  jars_return_fish <- c(0,0,1,4,0,0,1,1,0,0,0,1,0,0,0,0,0,5,2,0,0,1,0,0,0,0,1,0,0,3),
-  jars_return_garlic <- c(0,1,0,0,0,0,4,0,0,2,0,8,0,0,0,0,0,0,0,1,0,7,8,5,4,6,8,12,0,5)
+  jars_fish = c(32,36,34,30,31,33,35,36,32,34,30,29,33,31,32,36,37,35,34,33,30,32,31,30,33,34,35,36,37,32),
+  jars_garlic = c(28,27,26,30,31,28,27,29,30,31,32,30,31,33,32,34,33,32,30,29,28,30,31,33,32,34,36,35,36,33),
+  jars_return_fish = c(0,0,1,4,0,0,1,1,0,0,0,1,0,0,0,0,0,5,2,0,0,1,0,0,0,0,1,0,0,3),
+  jars_return_garlic = c(0,1,0,0,0,0,4,0,0,2,0,8,0,0,0,0,0,0,0,1,0,7,8,5,4,6,8,12,0,5),
+  unit_price_garlic = 20,
+  unit_price_fish = 20
   )
 mean(sales_data$jars_fish) ##daily sales
 mean(sales_data$jars_garlic)
 sd(sales_data$jars_fish) ##Standard deviation
 sd(sales_data$jars_garlic)
-summary(sales_data$jars_fish) ##show IQR,mean,min,max
+summary(sales_data$jars_fish)
 summary(sales_data$jars_garlic)
 -----------------------------------------------------------------------------------------------------------------------------
-##graph and plot, there might be error with copy paste, if there's please try type manually.
+##graph and plot
   
 par(mfrow = c(1, 2))
   hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold")
+  grid()
   hist(sales_data$jars_garlic, col = "red", main = "Jar garlic Sales", xlab = "Jars Sold")
+  grid()
   par(mfrow = c(1, 1))
 ##
   
 boxplot(sales_data$jars_fish, sales_data$jars_garlic, names = c("Jar fish", "Jar garlic"), main = "Boxplot of Daily Jar Sales", col = c("blue", "red"), ylab = "Jars Sold")
+grid()
 ##
 
 plot(sales_data$day, sales_data$jars_fish, type = "b", col = "blue", ylim = c(min(sales_data), max(sales_data)), main = "Daily Sales Over Time", ylab = "Jars Sold", xlab = "Day")
@@ -71,7 +76,7 @@ print(error_garlic)
 print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic))
 
 ## We have 95% confident believe true mean daily sales of fish_jar lies between " print(c(x_bar_fish - error_fish, x_bar_fish + error_fish)) " value.
-## We have 95% confident believe true mean daily sales of garlic_jar lies between " print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic)) "
+## We have 95% confident believe true mean daily sales of garlic_jar lies between " print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic)) " value.
 -------------------------------------------------------------------------------------------------------------------------------
 ##Bias
   
@@ -96,8 +101,8 @@ chisq.test(sales_data$jars_fish)
 ##Jar_Garlic sales
 chisq.test(sales_data$jars_garlic)
 
-## If p-value < 0.05, reject H0, sales are not uniformly distributed. It indicates maybe the sales are not random, and some days or outcomes are significantly different from others. So we can answer question like "Do sales spike on weekends and drop on weekdays?" e.t.c.
-## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution. This indicates that we do not provide sufficient evidence to conclude that sales are anything but uniformly distributed. Example) Let's say we have promotion here and we get this result, so we can say that our data did not provide enough evidence to conclude that the promotion had a statistically significant effect.
+## If p-value < 0.05, reject H0, sales are not uniformly distributed.
+## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
 -------------------------------------------------------------------------------------------------------------------------------
 ##Number of returns on goods (Poisson distribution is being used here because events are independent)
 
@@ -113,13 +118,16 @@ var(returns_fish) ##sqrt(var(return)) is the value of get return w/ more details
 var(returns_garlic)
 
 par(mfrow = c(1, 2))
-hist(returns_fish, col="blue", main="Daily Returns_fish", xlab="Returns per Day") ##prediction based on lambda_fish and garlic
+hist(returns_fish, col="blue", main="Daily Returns_fish", xlab="Returns per Day") ##A prediction based on lambda_fish and garlic with random distribution.
 hist(returns_garlic,col="red", main="Daily Returns_garlic", xlab="Returns per Day")
 par(mfrow = c(1, 1)) 
 
+
 par(mfrow=c(1,2))
 hist(sales_data$jars_return_fish, col="blue", main="Daily Fish Returns", xlab="Number of Returns") ##Return rate based on actual case
+grid()
 hist(sales_data$jars_return_garlic, col="red", main="Daily Garlic Returns", xlab="Number of Returns")
+grid()
 par(mfrow=c(1,1))
 
 ## When the number of returns is higher than average, it may indicate a recent issue such as product defect or might have issue with the origin of the goods e.t.c.
@@ -137,11 +145,12 @@ summary_stats <- data.frame(
   Avg_Daily_Revenue = mean(sales_data$total_revenue)
 )
 
-summary_stats      ##The revenue_total,fish and garlic
+summary_stats ##The revenue_total,fish and garlic
 par(mfrow=c(1,3))
-plot(sales_data$day, sales_data$revenue_garlic, type = "b", col = "red", xlab = "Day", ylab = "Jars_garlic Revenue", main = "Daily jars_garlic Revenue") ##graph of revenue_garlic   ##graph with revenue garlic
-plot(sales_data$day, sales_data$revenue_fish, type = "b", col = "blue", xlab = "Day", ylab = "Jars_fish Revenue", main = "Daily jars_fish Revenue") ##graph of revenue_fish          ##graph with revenue fish
-plot(sales_data$day, sales_data$total_revenue, type = "b", col = "green", xlab = "Day", ylab = "Total Revenue", main = "Daily Total Revenue") ##graph of revenue_total               ##graph with total revenue
+plot(sales_data$day, sales_data$revenue_garlic, type = "b", col = "red", xlab = "Day", ylab = "Jars_garlic Revenue", main = "Daily jars_garlic Revenue") ##graph of revenue_garlic
+grid()
+plot(sales_data$day, sales_data$revenue_fish, type = "b", col = "blue", xlab = "Day", ylab = "Jars_fish Revenue", main = "Daily jars_fish Revenue") ##graph of revenue_fish
+grid()
+plot(sales_data$day, sales_data$total_revenue, type = "b", col = "green", xlab = "Day", ylab = "Total Revenue", main = "Daily Total Revenue") ##graph of revenue_total
+grid()
 par(mfrow=c(1,1))
------------------------------------------------------------------------------------------------------------------------------------------------------
-##
