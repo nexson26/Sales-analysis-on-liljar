@@ -154,3 +154,31 @@ grid()
 plot(sales_data$day, sales_data$total_revenue, type = "b", col = "green", xlab = "Day", ylab = "Total Revenue", main = "Daily Total Revenue") ##graph of revenue_total
 grid()
 par(mfrow=c(1,1))
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+##Gross Profit, Gross Profit = Revenue - Cost
+  
+##(you can write your own calculation code here to calculate per cost here)
+ cost_per_jar = 2
+ cost_fish = 8
+ cost_garlic = 1.4
+ cost_fishsideingredient = 3
+ cost_garlicsideingredient = 3
+##(You can separate out more cost here for detail)
+
+sales_data$gross_profit_fish = sales_data$revenue_fish - ((cost_per_jar + cost_fish + cost_fishsideingredient) * sales_data$jars_fish)
+sales_data$gross_profit_garlic <- sales_data$revenue_garlic - ((cost_per_jar + cost_garlic + cost_garlicsideingredient) * sales_data$jars_garlic)
+sales_data$total_gross_profit <- sales_data$gross_profit_fish + sales_data$gross_profit_garlic
+  
+summary_stats <- data.frame(
+  Fish_Gross_Profit = sum(sales_data$gross_profit_fish),
+  Garlic_Gross_Profit = sum(sales_data$gross_profit_garlic),
+  Total_Gross_Profit = sum(sales_data$total_gross_profit),
+  Average_Daily_Gross_Profit = mean(sales_data$total_gross_profit)
+)
+print(summary_stats) ##gross profit of fish, garlic, total and the mean of total
+
+par(mfrow=c(1,3)) ##gross profit graph
+plot(sales_data$day, sales_data$gross_profit_fish, type="b", col="blue", xlab="Day", ylab="Gross Profit", main="Daily Fish Profit"); grid()
+plot(sales_data$day, sales_data$gross_profit_garlic, type="b", col="red", xlab="Day", ylab="Gross Profit", main="Daily Garlic Profit"); grid()
+plot(sales_data$day, sales_data$total_gross_profit, type="b", col="green", xlab="Day", ylab="Gross Profit", main="Daily Total Profit"); grid()  
+par(mfrow=c(1,1))  
