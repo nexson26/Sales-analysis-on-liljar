@@ -1,4 +1,4 @@
-##Simulate data on lil,they are not real dataset.
+##The data are simulated and not real dataset.
 
 sales_data <- data.frame(
   day = 1:30,
