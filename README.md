@@ -1,4 +1,4 @@
-## Simulate Data on Lil’ Jar in R Program (code is still developing)
+## Simulate Data on Lil’ Jar in R Program (code is still under developing)
 The data are simulated and not real. The code is provided in the "R Program Code" file along with the necessary explanations.
 
 Lil’ Jar
