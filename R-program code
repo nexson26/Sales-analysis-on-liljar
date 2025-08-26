@@ -91,12 +91,10 @@ cat("Bias for Jar garlic:", bias_garlic, "\n")
 ## H1: Observed sales do not follow a uniform distribution.
   
 ##Jar_Fish sales
-observed_fish <- sales_data$jars_fish
-chisq.test(observed_fish)
+chisq.test(sales_data$jars_fish)
 
 ##Jar_Garlic sales
-observed_garlic <- sales_data$jars_garlic
-chisq.test(observed_garlic)
+chisq.test(sales_data$jars_garlic)
 
 ## If p-value < 0.05, reject H0, sales are not uniformly distributed.
 ## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
