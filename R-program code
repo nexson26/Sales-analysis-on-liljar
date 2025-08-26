@@ -101,8 +101,8 @@ chisq.test(sales_data$jars_garlic)
 -------------------------------------------------------------------------------------------------------------------------------
 ##Number of returns on goods (Poisson distribution is being used here because events are independent)
 
-lambda_fish <- c(sales_data$jars_return_fish....c.0..0..1..4..0..0..1..1..0..0..0..1..0..) ##Average return rate
-lambda_garlic <- c(sales_data$jars_return_garlic....c.0..1..0..0..0..0..4..0..0..2..0..8..0..)
+lambda_fish <- mean(sales_data$jars_return_fish) ##Average return rate
+lambda_garlic <- mean(sales_data$jars_return_garlic)
 dpois(0:10, lambda_fish) ##Prob of the rate getting return with 0,...,10 in a day
 dpois(0:10, lambda_garlic)
 returns_fish <- rpois(30, lambda_fish) #Simulate 30 days of returns w/ random distribution, which mean it's used for prediction.
