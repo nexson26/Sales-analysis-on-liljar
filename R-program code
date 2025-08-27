@@ -158,8 +158,8 @@ par(mfrow=c(1,1))
 cost_per_jar = 40/30
 cost_fish = 80/30
 cost_garlic = 22/30
-cost_fishsideingredient = 30/3
-cost_garlicsideingredient = 33/3
+cost_fishsideingredient = 30/30
+cost_garlicsideingredient = 33/30
 ##(You can separate out more cost here for detail)
 
 sales_data$gross_profit_fish = sales_data$revenue_fish - ((cost_per_jar + cost_fish + cost_fishsideingredient) * sales_data$jars_fish)
