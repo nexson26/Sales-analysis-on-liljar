@@ -1,2 +1,9 @@
-In August 2025, my sister’s business launched two new jar-based food products (Jar_fish and Jar_garlic). I simulated and analyzed 30 days of sales data using R, designed to support long-term tracking and provide continuous insights for business improvement. I calculated daily revenue and gross profit per product and overall, including detailed cost components, and visualized trends using histograms, boxplots, and line plots. I also simulated product returns using Poisson distributions to predict daily return trends and identify potential quality issues.
-I applied various statistical methods—descriptive statistics, hypothesis testing (paired t-test), F-tests, confidence intervals, and Chi-squared goodness-of-fit tests—to compare product performance and assess sales variability. I structured the analysis to estimate bias between observed and expected sales, enabling future comparisons and monitoring. Results were communicated in simple, actionable terms to help my sister make informed business decisions.
+In August 2025, my sister’s business launched two new jar-based food products (Jar_fish and Jar_garlic).
+I simulated and analyzed 30 days of sales data using R, designed to support long-term tracking and provide continuous insights for business improvement.
+I calculated daily revenue and gross profit per product and overall, including detailed cost components, and visualized trends using histograms, boxplots, and line plots.
+I also simulated product returns using Poisson distributions to predict daily return trends and identify potential quality issues.
+
+
+I applied various statistical methods—descriptive statistics, hypothesis testing (paired t-test), F-tests, confidence intervals, and Chi-squared goodness-of-fit tests—to compare product performance and assess sales variability.
+I structured the analysis to estimate bias between observed and expected sales, enabling future comparisons and monitoring.
+Results were communicated in simple, actionable terms to help my sister make informed business decisions.
