@@ -1,7 +1,9 @@
 ##Simulate data on lil,these are not real dataset.
 
 sales_data = data.frame(
-  day = 1:30,
+  date = seq.Date(from = as.Date("2025-08-01"),
+                  by = "day",
+                  length.out = 30),
   jars_fish = c(32,36,34,30,31,33,35,36,32,34,30,29,33,31,32,36,37,35,34,33,30,32,31,30,33,34,35,36,37,32),
   jars_garlic = c(28,27,26,30,31,28,27,29,30,31,32,30,31,33,32,34,33,32,30,29,28,30,31,33,32,34,36,35,36,33),
   jars_return_fish = c(0,0,1,4,0,0,1,1,0,0,0,1,0,0,0,0,0,5,2,0,0,1,0,0,0,0,1,0,0,3),
@@ -15,38 +17,43 @@ sd(sales_data$jars_fish) ##Standard deviation
 sd(sales_data$jars_garlic)
 summary(sales_data$jars_fish)
 summary(sales_data$jars_garlic)
+
+##Export to CSV if need, getwd() is for check where file was saved
+write.csv(sales_data, "sales_data_lilJar.csv", row.names = FALSE); getwd()
+
+##or just read data from excel instead of typing like I did on top.
+##Replace "your_file.csv" with the actual filename + path.
+data <- read.table(" Your folder.csv ",header = "TRUE")
 -----------------------------------------------------------------------------------------------------------------------------
 ##graph and plot
   
 par(mfrow = c(1, 2))
-  hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold")
-  grid()
-  hist(sales_data$jars_garlic, col = "red", main = "Jar garlic Sales", xlab = "Jars Sold")
-  grid()
+  hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold"); grid()
+  hist(sales_data$jars_garlic, col = "red", main = "Jar garlic Sales", xlab = "Jars Sold"); grid()
   par(mfrow = c(1, 1))
 ##
   
-boxplot(sales_data$jars_fish, sales_data$jars_garlic, names = c("Jar fish", "Jar garlic"), main = "Boxplot of Daily Jar Sales", col = c("blue", "red"), ylab = "Jars Sold")
-grid()
+boxplot(sales_data$jars_fish, sales_data$jars_garlic, names = c("Jar fish", "Jar garlic"), main = "Boxplot of Daily Jar Sales", col = c("blue", "red"), ylab = "Jars Sold"); grid()
 ##
 
-plot(sales_data$day, sales_data$jars_fish, type = "b", col = "blue", ylim = c(min(sales_data), max(sales_data)), main = "Daily Sales Over Time", ylab = "Jars Sold", xlab = "Day")
-  lines(sales_data$day, sales_data$jars_garlic, type = "b", col = "red")
-  legend("bottomleft", c("Jar_fish","Jar_garlic") ,legend = c("Jar fish", "Jar garlic"), col = c("blue", "red"), lty = 1, pch = 1)
+plot(sales_data$date, sales_data$jars_fish, type = "b", col = "blue", ylim = c(min(sales_data$jars_fish, sales_data$jars_garlic), max(sales_data$jars_fish, sales_data$jars_garlic)), main = "Daily Sales Over Time", ylab = "Jars Sold", xlab = "Date")
+lines(sales_data$date, sales_data$jars_garlic, type = "b", col = "red")
+legend("bottomright", legend = c("Fish", "Garlic"),
+       col = c("blue", "red"), lty = 1, pch = 1)
 ------------------------------------------------------------------------------------------------------------------------------
 ##hypothesis test,      null  hypo:   u_A =  u_B
 ##                alternative hypo:   u_A != u_B
 ## Reject null if p-value < 0.05
     
-t.test(sales_data$jars_fish,sales_data$jars_garlic, paired = TRUE) ##manual type, no copy paste
-  
+t.test(sales_data$jars_fish,sales_data$jars_garlic, paired = TRUE)
+
 ##T suggest how large is the sales diff mean between A(fish) and B(garlic).
 ------------------------------------------------------------------------------------------------------------------------------------------------------------  
 ##F-test, F=jar_fish/jar_garlic, F mean how stable are jar_fish and jar_garlic on daily sales.
 ##                      null  hypo:   sigma^2_fish =  sigma^2_garlic
 ##                alternative hypo:   sigma^2_fish != sigma^2_garlic
     
-var.test(sales_data$jars_fish, sales_data$jars_garlic)             ##manual type, no copy paste
+var.test(sales_data$jars_fish, sales_data$jars_garlic)
   
 ## If p-value < 0.05, reject H0, Jar_fish and Jar_garlic have significantly different variances.
 ## If p-value ≥ 0.05, fail to reject H0, no significant difference in variance between them.
@@ -80,10 +87,10 @@ print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic))
 -------------------------------------------------------------------------------------------------------------------------------
 ##Bias
   
-true_mean_fish <- 30           #the first day sales until today for both true mean(fish and garlic)
-true_mean_garlic <- 30
-bias_fish <- x_bar_fish - true_mean_fish
-bias_garlic <- x_bar_garlic - true_mean_garlic
+true_mean_fish = 30           #the first day sales until today for both true mean(fish and garlic)
+true_mean_garlic = 30
+bias_fish = x_bar_fish - true_mean_fish
+bias_garlic = x_bar_garlic - true_mean_garlic
 cat("Bias for Jar fish:", bias_fish, "\n")
 cat("Bias for Jar garlic:", bias_garlic, "\n")
 
@@ -108,7 +115,7 @@ chisq.test(sales_data$jars_garlic)
 
 lambda_fish <- mean(sales_data$jars_return_fish) ##Average return rate
 lambda_garlic <- mean(sales_data$jars_return_garlic)
-dpois(0:10, lambda_fish) ##Prob of the rate getting return with 0,...,10 in a day
+dpois(0:10, lambda_fish) ##Prob of the rate getting return with amount 0,...,10 in a day
 dpois(0:10, lambda_garlic)
 returns_fish <- rpois(30, lambda_fish) #Simulate 30 days of returns w/ random distribution, which mean it's used for prediction.
 returns_garlic <- rpois(30, lambda_garlic)
@@ -118,16 +125,14 @@ var(returns_fish) ##sqrt(var(return)) is the value of get return w/ more details
 var(returns_garlic)
 
 par(mfrow = c(1, 2))
-hist(returns_fish, col="blue", main="Daily Returns_fish", xlab="Returns per Day") ##A prediction based on lambda_fish and garlic with random distribution.
-hist(returns_garlic,col="red", main="Daily Returns_garlic", xlab="Returns per Day")
+hist(returns_fish, col="blue", main="Daily Returns_fish", xlab="Returns per Day");grid() ##A prediction based on lambda_fish and garlic with random distribution.
+hist(returns_garlic,col="red", main="Daily Returns_garlic", xlab="Returns per Day");grid()
 par(mfrow = c(1, 1)) 
 
 
 par(mfrow=c(1,2))
-hist(sales_data$jars_return_fish, col="blue", main="Daily Fish Returns", xlab="Number of Returns") ##Return rate based on actual case
-grid()
-hist(sales_data$jars_return_garlic, col="red", main="Daily Garlic Returns", xlab="Number of Returns")
-grid()
+hist(sales_data$jars_return_fish, col="blue", main="Daily Fish Returns", xlab="Number of Returns");grid() ##Return rate based on actual case
+hist(sales_data$jars_return_garlic, col="red", main="Daily Garlic Returns", xlab="Number of Returns");grid()
 par(mfrow=c(1,1))
 
 ## When the number of returns is higher than average, it may indicate a recent issue such as product defect or might have issue with the origin of the goods e.t.c.
@@ -147,9 +152,9 @@ summary_stats <- data.frame(
 summary_stats ##The revenue_total,fish and garlic
 
 par(mfrow=c(1,3))
-plot(sales_data$day, sales_data$revenue_garlic, type = "b", col = "red", xlab = "Day", ylab = "Jars_garlic Revenue", main = "Daily jars_garlic Revenue");grid() ##graph of revenue_garlic
-plot(sales_data$day, sales_data$revenue_fish, type = "b", col = "blue", xlab = "Day", ylab = "Jars_fish Revenue", main = "Daily jars_fish Revenue");grid() ##graph of revenue_fish
-plot(sales_data$day, sales_data$total_revenue, type = "b", col = "green", xlab = "Day", ylab = "Total Revenue", main = "Daily Total Revenue");grid() ##graph of revenue_total
+plot(sales_data$date, sales_data$revenue_garlic, type = "b", col = "red", xlab = "Day", ylab = "Jars_garlic Revenue", main = "Daily jars_garlic Revenue");grid() ##graph of revenue_garlic
+plot(sales_data$date, sales_data$revenue_fish, type = "b", col = "blue", xlab = "Day", ylab = "Jars_fish Revenue", main = "Daily jars_fish Revenue");grid() ##graph of revenue_fish
+plot(sales_data$date, sales_data$total_revenue, type = "b", col = "green", xlab = "Day", ylab = "Total Revenue", main = "Daily Total Revenue");grid() ##graph of revenue_total
 par(mfrow=c(1,1))
 -------------------------------------------------------------------------------------------------------------------------------
 ##Gross Profit, Gross Profit = Revenue - Cost
@@ -160,7 +165,11 @@ cost_fish = 80/30
 cost_garlic = 22/30
 cost_fishsideingredient = 30/30
 cost_garlicsideingredient = 33/30
+accident_cost = 0 ##if accident happen and we need repair machine or e.t.c.
 ##(You can separate out more cost here for detail)
+
+sales_data$totalcostoffish = cost_per_jar + cost_fish + cost_fishsideingredient + accident_cost
+sales_data$totalcostofgarlic = cost_per_jar + cost_garlic + cost_garlicsideingredient + accident_cost
 
 sales_data$gross_profit_fish = sales_data$revenue_fish - ((cost_per_jar + cost_fish + cost_fishsideingredient) * sales_data$jars_fish)
 sales_data$gross_profit_garlic <- sales_data$revenue_garlic - ((cost_per_jar + cost_garlic + cost_garlicsideingredient) * sales_data$jars_garlic)
@@ -175,9 +184,9 @@ summary_stats <- data.frame(
 print(summary_stats) ##gross profit of fish, garlic, total and the mean of total
 
 par(mfrow=c(1,3)) ##gross profit graph
-plot(sales_data$day, sales_data$gross_profit_fish, type="b", col="blue", xlab="Day", ylab="Gross Profit", main="Daily Fish Profit"); grid()
-plot(sales_data$day, sales_data$gross_profit_garlic, type="b", col="red", xlab="Day", ylab="Gross Profit", main="Daily Garlic Profit"); grid()
-plot(sales_data$day, sales_data$total_gross_profit, type="b", col="green", xlab="Day", ylab="Gross Profit", main="Daily Total Profit"); grid()  
+plot(sales_data$date, sales_data$gross_profit_fish, type="b", col="blue", xlab="Day", ylab="Gross Profit", main="Daily Fish Profit"); grid()
+plot(sales_data$date, sales_data$gross_profit_garlic, type="b", col="red", xlab="Day", ylab="Gross Profit", main="Daily Garlic Profit"); grid()
+plot(sales_data$date, sales_data$total_gross_profit, type="b", col="green", xlab="Day", ylab="Gross Profit", main="Daily Total Profit"); grid()  
 par(mfrow=c(1,1))  
 -------------------------------------------------------------------------------------------------------------------------------
 ##Net profit, Net profit = gross profit - operating expenses
@@ -186,7 +195,7 @@ par(mfrow=c(1,1))
 sales_data$utilities = 120/30 ##water,electric
 sales_data$marketing = 90/30 ##advertisement
 sales_data$miscellaneous = 15.5/30 ##delivery fee
-sales_data$packaging = 30/30 ##packaging and labelling
+sales_data$packaging = 30/30 ##packaging and labeling
 sales_data$rent = 0/30 ##shop renting
 sales_data$salary = 0/30 ##salary for worker
 
@@ -209,9 +218,9 @@ net_profit_summary <- data.frame(
 print(net_profit_summary) ##net profit with total,fish, garlic and mean of total
 
 par(mfrow=c(1,3))
-plot(sales_data$day, sales_data$net_profit_fish, type="b", col="blue", xlab="Day", ylab="Net Profit", main="Daily Fish Net Profit"); grid()
-plot(sales_data$day, sales_data$net_profit_garlic, type="b", col="red", xlab="Day", ylab="Net Profit", main="Daily Garlic Net Profit"); grid()
-plot(sales_data$day, sales_data$total_net_profit, type="b", col="green", xlab="Day", ylab="Net Profit", main="Daily Total Net Profit"); grid()
+plot(sales_data$date, sales_data$net_profit_fish, type="b", col="blue", xlab="Day", ylab="Net Profit", main="Daily Fish Net Profit"); grid()
+plot(sales_data$date, sales_data$net_profit_garlic, type="b", col="red", xlab="Day", ylab="Net Profit", main="Daily Garlic Net Profit"); grid()
+plot(sales_data$date, sales_data$total_net_profit, type="b", col="green", xlab="Day", ylab="Net Profit", main="Daily Total Net Profit"); grid()
 par(mfrow=c(1,1))
 -------------------------------------------------------------------------------------------------------------------------------
 ##Return On Investment, ROI = (Revenue - Cost) / (Cost)
@@ -229,9 +238,15 @@ ROI_summary <- data.frame(
 print(ROI_summary)  
 
 par(mfrow=c(1,3))
-plot(sales_data$day,sales_data$ROI_fish, type="b",col="blue",xlab="Day", ylab="ROI_fish", main="Daily Fish ROI");grid()
-plot(sales_data$day,sales_data$ROI_garlic, type="b",col="red",xlab="Day", ylab="ROI_garlic", main="Daily Garlic ROI");grid()
-plot(sales_data$day,sales_data$Total_ROI, type="b",col="green",xlab="Day", ylab="Total_ROI", main="Daily Total ROI");grid()
+plot(sales_data$date,sales_data$ROI_fish, type="b",col="blue",xlab="Day", ylab="ROI_fish", main="Daily Fish ROI");grid()
+plot(sales_data$date,sales_data$ROI_garlic, type="b",col="red",xlab="Day", ylab="ROI_garlic", main="Daily Garlic ROI");grid()
+plot(sales_data$date,sales_data$Total_ROI, type="b",col="green",xlab="Day", ylab="Total_ROI", main="Daily Total ROI");grid()
 par(mfrow=c(1,1))
+-------------------------------------------------------------------------------------------------------------------------------
+##
+
+-------------------------------------------------------------------------------------------------------------------------------
+##
+
 -------------------------------------------------------------------------------------------------------------------------------
 ##
