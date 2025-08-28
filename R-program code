@@ -1,7 +1,7 @@
 ##Simulate data on lil,these are not real dataset.
 
 sales_data = data.frame(
-  date = seq.Date(from = as.Date("2025-08-01"),
+  date = seq.Date(from = as.Date("2025-08-01"), ##youcan just skip line 4 - 6 and instead type "date = 1:30".
                   by = "day",
                   length.out = 30),
   jars_fish = c(32,36,34,30,31,33,35,36,32,34,30,29,33,31,32,36,37,35,34,33,30,32,31,30,33,34,35,36,37,32),
