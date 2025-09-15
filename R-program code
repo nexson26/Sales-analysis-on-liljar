@@ -1,7 +1,7 @@
 ##Simulate data on lil,these are not real dataset.
 
 sales_data = data.frame(
-  date = seq.Date(from = as.Date("2025-08-01"), ##youcan just skip line 4 - 6 and instead type "date = 1:30".
+  date = seq.Date(from = as.Date("2025-08-01"), ##you can skip line 4 - 6 and instead type "date = 1:30".
                   by = "day",
                   length.out = 30),
   jars_fish = c(32,36,34,30,31,33,35,36,32,34,30,29,33,31,32,36,37,35,34,33,30,32,31,30,33,34,35,36,37,32),
@@ -10,15 +10,28 @@ sales_data = data.frame(
   jars_return_garlic = c(0,1,0,0,0,0,4,0,0,2,0,8,0,0,0,0,0,0,0,1,0,7,8,5,4,6,8,12,0,5),
   unit_price_garlic = 20,
   unit_price_fish = 20
-  )
+)
+
+sales_data$Jars_fishandgarlic = sales_data$jars_fish + sales_data$jars_garlic
+combined_summary <- data.frame(
+  Min. = min(sales_data$Jars_fishandgarlic),
+  Qu.1st = as.numeric(quantile(sales_data$Jars_fishandgarlic, 0.25)),
+  Median = median(sales_data$Jars_fishandgarlic),
+  Mean = mean(sales_data$Jars_fishandgarlic),
+  Qu.3rd = as.numeric(quantile(sales_data$Jars_fishandgarlic, 0.75)),
+  Max. = max(sales_data$Jars_fishandgarlic),
+  SD = sd(sales_data$Jars_fishandgarlic)
+)
+
 mean(sales_data$jars_fish) ##daily sales
 mean(sales_data$jars_garlic)
 sd(sales_data$jars_fish) ##Standard deviation
 sd(sales_data$jars_garlic)
-summary(sales_data$jars_fish)
+summary(sales_data$jars_fish) ##IQR
 summary(sales_data$jars_garlic)
+print(combined_summary) ##A combined summary of fish+garlic (Mean, SD, IQR)
 
-##Export to CSV if need, getwd() is for check where file was saved
+##Export to CSV if need, getwd() is to check where file was saved
 write.csv(sales_data, "sales_data_lilJar.csv", row.names = FALSE); getwd()
 
 ##or just read data from excel instead of typing like I did on top.
@@ -26,51 +39,89 @@ write.csv(sales_data, "sales_data_lilJar.csv", row.names = FALSE); getwd()
 data <- read.table(" Your folder.csv ",header = "TRUE")
 -----------------------------------------------------------------------------------------------------------------------------
 ##graph and plot
-  
-par(mfrow = c(1, 2))
-  hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold"); grid()
-  hist(sales_data$jars_garlic, col = "red", main = "Jar garlic Sales", xlab = "Jars Sold"); grid()
-  par(mfrow = c(1, 1))
-##
-  
-boxplot(sales_data$jars_fish, sales_data$jars_garlic, names = c("Jar fish", "Jar garlic"), main = "Boxplot of Daily Jar Sales", col = c("blue", "red"), ylab = "Jars Sold"); grid()
-##
 
-plot(sales_data$date, sales_data$jars_fish, type = "b", col = "blue", ylim = c(min(sales_data$jars_fish, sales_data$jars_garlic), max(sales_data$jars_fish, sales_data$jars_garlic)), main = "Daily Sales Over Time", ylab = "Jars Sold", xlab = "Date")
+par(mfrow = c(1, 3))
+hist(sales_data$jars_fish, col = "blue", main = "Jar fish Sales", xlab = "Jars Sold"); grid()
+hist(sales_data$jars_garlic, col = "red", main = "Jar garlic Sales", xlab = "Jars Sold"); grid()
+hist(sales_data$Jars_fishandgarlic, col = "green", main = "Total Jar Sales", xlab ="Total Jars Sold"); grid()
+par(mfrow = c(1, 1))
+
+##We can remove green(total) as we actually just want to compare both product in visual.
+boxplot(sales_data$jars_fish, sales_data$jars_garlic, sales_data$Jars_fishandgarlic , names = c("Jar fish", "Jar garlic", "Total Jar"), main = "Boxplot of Daily Jar Sales", col = c("blue", "red", "green"), ylab = "Jars Sold"); grid()
+
+##Not having total(green) here,because I think not necessary, we only compare both product
+plot(sales_data$date, sales_data$jars_fish, type = "b", col = "blue", ylim = c(min(sales_data$jars_fish, sales_data$jars_garlic), max(sales_data$jars_fish, sales_data$jars_garlic)), main = "Daily Sales Over Time", xlab = "Date", ylab = "Jars Sold")
 lines(sales_data$date, sales_data$jars_garlic, type = "b", col = "red")
-legend("bottomright", legend = c("Fish", "Garlic"),
-       col = c("blue", "red"), lty = 1, pch = 1)
+legend("bottomright", legend = c("Fish", "Garlic"), col = c("blue", "red"), lty = 1, pch = 1)
+-----------------------------------------------------------------------------------------------------------------------------
+##Model diagnose - Simple regression
+##check whether residual is normalize (constant variance, linearity and normality),if assumption is NOT hold mean regression results (p-values, confidence intervals, predictions) may be misleading.
+model <- lm(jars_fish ~ jars_garlic, data = sales_data) ##original model, and asking “Can garlic sales explain/predict fish sales?”
+
+##linearity: scatter plot of x vs y
+plot(sales_data$jars_garlic, sales_data$jars_fish, main="Scatterplot of Fish vs Garlic Sales", xlab="Garlic jars sold", ylab="Fish jars sold", pch=16, col = "blue")
+abline(h=0,col="red",lwd=2)
+
+##Normalize residual: qqplot of residual
+qqnorm(resid(model))
+qqline(resid(model), col = "red")
+
+##Constant variance
+plot(fitted(model), resid(model), main = "Residuals vs Fitted", xlab = "Fitted values (ŷ)", ylab = "Residuals (y - ŷ)")
+abline(h=0, col = "red",lwd=2)
+##If the residual is not constant, we need a transformation. Also, if not constant it tells us that y has large variance. (y=beta0+beta1x1+residual).
+##transformation : (sqrty= beta0 + beta1 x1 + residual),(sqrty=log(y), the limitation here is that y must be positive).
+model_sqrt <- lm(sqrt(jars_fish) ~ jars_garlic, data = sales_data) # Square-root transform of y
+summary(model_sqrt)
+
+model_log <- lm(log(jars_fish) ~ jars_garlic, data = sales_data) ##Log transform of y(y must be positive)
+summary(model_log)
+
+par(mfrow=c(2,2))
+plot(model_sqrt, main = "Diagnostics: sqrt(y)")
+plot(model_log, main = "Diagnostics: log(y)")
+par(mfrow = c(1, 1))
+
+##Helpful shortcuts
+fitted(model)      # same as predicted values ŷ
+resid(model)       # residuals = y - ŷ
+predict(model)     # flexible predictions (for new data too)
+------------------------------------------------------------------------------------------------------------------------------
+##Model Diagnose - Multiple regression
+  
+  
+  
 ------------------------------------------------------------------------------------------------------------------------------
 ##hypothesis test,      null  hypo:   u_A =  u_B
 ##                alternative hypo:   u_A != u_B
 ## Reject null if p-value < 0.05
-    
-t.test(sales_data$jars_fish,sales_data$jars_garlic, paired = TRUE)
+  
+  t.test(sales_data$jars_fish,sales_data$jars_garlic, paired = TRUE)
 
 ##T suggest how large is the sales diff mean between A(fish) and B(garlic).
 ------------------------------------------------------------------------------------------------------------------------------------------------------------  
 ##F-test, F=jar_fish/jar_garlic, F mean how stable are jar_fish and jar_garlic on daily sales.
 ##                      null  hypo:   sigma^2_fish =  sigma^2_garlic
 ##                alternative hypo:   sigma^2_fish != sigma^2_garlic
-    
-var.test(sales_data$jars_fish, sales_data$jars_garlic)
   
+  var.test(sales_data$jars_fish, sales_data$jars_garlic)
+
 ## If p-value < 0.05, reject H0, Jar_fish and Jar_garlic have significantly different variances.
 ## If p-value ≥ 0.05, fail to reject H0, no significant difference in variance between them.
-  
-  sd(sales_data$jars_fish)   ##higher value tell higher fluctuation
-  sd(sales_data$jars_garlic) ##higher value tell higher fluctuation
-  
+
+sd(sales_data$jars_fish)   ##higher value tell higher fluctuation
+sd(sales_data$jars_garlic) ##higher value tell higher fluctuation
+
 ##We can compare which one has more stability(variance) then other one.
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
-# 95% CI for jars_fish&garlic, (95%->0.975 || 99% ->0.995 || 90% -> 0.95)
-    
-length(sales_data$jars_fish)
+## 95% CI for jars_fish&garlic, (95%->0.975 || 99% ->0.995 || 90% -> 0.95)
+  
+  length(sales_data$jars_fish)
 x_bar_fish <- mean(sales_data$jars_fish)
 sd_fish <- sd(sales_data$jars_fish)
 error_fish <- qt(0.975, df = length(sales_data$jars_fish) - 1) * sd_fish / sqrt(length(sales_data$jars_fish))
 c(x_bar_fish - error_fish, x_bar_fish + error_fish)
-  
+
 length(sales_data$jars_garlic)
 x_bar_garlic <- mean(sales_data$jars_garlic)
 sd_garlic <- sd(sales_data$jars_garlic)
@@ -87,7 +138,7 @@ print(c(x_bar_garlic - error_garlic, x_bar_garlic + error_garlic))
 -------------------------------------------------------------------------------------------------------------------------------
 ##Bias
   
-true_mean_fish = 30           #the first day sales until today for both true mean(fish and garlic)
+true_mean_fish = 30           ##the first day sales until today for both true mean(fish and garlic)
 true_mean_garlic = 30
 bias_fish = x_bar_fish - true_mean_fish
 bias_garlic = x_bar_garlic - true_mean_garlic
@@ -112,12 +163,12 @@ chisq.test(sales_data$jars_garlic)
 ## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
 -------------------------------------------------------------------------------------------------------------------------------
 ##Number of returns on goods (Poisson distribution is being used here because events are independent)
-
+  
 lambda_fish <- mean(sales_data$jars_return_fish) ##Average return rate
 lambda_garlic <- mean(sales_data$jars_return_garlic)
 dpois(0:10, lambda_fish) ##Prob of the rate getting return with amount 0,...,10 in a day
 dpois(0:10, lambda_garlic)
-returns_fish <- rpois(30, lambda_fish) #Simulate 30 days of returns w/ random distribution, which mean it's used for prediction.
+returns_fish <- rpois(30, lambda_fish) ##Simulate 30 days of returns w/ random distribution, which mean it's used for prediction.
 returns_garlic <- rpois(30, lambda_garlic)
 mean(returns_fish) ##average daily returns observed
 mean(returns_garlic)
@@ -152,8 +203,8 @@ summary_stats <- data.frame(
 summary_stats ##The revenue_total,fish and garlic
 
 par(mfrow=c(1,3))
-plot(sales_data$date, sales_data$revenue_garlic, type = "b", col = "red", xlab = "Day", ylab = "Jars_garlic Revenue", main = "Daily jars_garlic Revenue");grid() ##graph of revenue_garlic
 plot(sales_data$date, sales_data$revenue_fish, type = "b", col = "blue", xlab = "Day", ylab = "Jars_fish Revenue", main = "Daily jars_fish Revenue");grid() ##graph of revenue_fish
+plot(sales_data$date, sales_data$revenue_garlic, type = "b", col = "red", xlab = "Day", ylab = "Jars_garlic Revenue", main = "Daily jars_garlic Revenue");grid() ##graph of revenue_garlic
 plot(sales_data$date, sales_data$total_revenue, type = "b", col = "green", xlab = "Day", ylab = "Total Revenue", main = "Daily Total Revenue");grid() ##graph of revenue_total
 par(mfrow=c(1,1))
 -------------------------------------------------------------------------------------------------------------------------------
@@ -174,7 +225,7 @@ sales_data$totalcostofgarlic = cost_per_jar + cost_garlic + cost_garlicsideingre
 sales_data$gross_profit_fish = sales_data$revenue_fish - ((cost_per_jar + cost_fish + cost_fishsideingredient) * sales_data$jars_fish)
 sales_data$gross_profit_garlic <- sales_data$revenue_garlic - ((cost_per_jar + cost_garlic + cost_garlicsideingredient) * sales_data$jars_garlic)
 sales_data$total_gross_profit <- sales_data$gross_profit_fish + sales_data$gross_profit_garlic
-  
+
 summary_stats <- data.frame(
   Fish_Gross_Profit = sum(sales_data$gross_profit_fish),
   Garlic_Gross_Profit = sum(sales_data$gross_profit_garlic),
@@ -190,7 +241,7 @@ plot(sales_data$date, sales_data$total_gross_profit, type="b", col="green", xlab
 par(mfrow=c(1,1))  
 -------------------------------------------------------------------------------------------------------------------------------
 ##Net profit, Net profit = gross profit - operating expenses
-  ##unit is (monthly cost)/(30days), so the price unit is daily operating expenses.
+##unit is (monthly cost)/(30days), so the price unit is operating expenses in daily.
 
 sales_data$utilities = 120/30 ##water,electric
 sales_data$marketing = 90/30 ##advertisement
@@ -215,7 +266,7 @@ net_profit_summary <- data.frame(
   Total_Net_Profit = sum(sales_data$total_net_profit),
   Average_Daily_Net_Profit = mean(sales_data$total_net_profit)
 )
-print(net_profit_summary) ##net profit with total,fish, garlic and mean of total
+print(net_profit_summary) ##net profit with total, fish, garlic and the mean on total
 
 par(mfrow=c(1,3))
 plot(sales_data$date, sales_data$net_profit_fish, type="b", col="blue", xlab="Day", ylab="Net Profit", main="Daily Fish Net Profit"); grid()
@@ -224,16 +275,16 @@ plot(sales_data$date, sales_data$total_net_profit, type="b", col="green", xlab="
 par(mfrow=c(1,1))
 -------------------------------------------------------------------------------------------------------------------------------
 ##Return On Investment, ROI = (Revenue - Cost) / (Cost)
-
+  
 sales_data$ROI_fish <- (sales_data$revenue_fish - sales_data$totalcostoffish)/ (sales_data$totalcostoffish)
 sales_data$ROI_garlic <- (sales_data$revenue_garlic - sales_data$operating_expense_garlic)/ (sales_data$operating_expense_garlic)
 sales_data$Total_ROI <- (sales_data$total_revenue - (sales_data$totalcostoffish + sales_data$operating_expense_garlic))/ (sales_data$totalcostoffish + sales_data$operating_expense_garlic)
-  
+
 ROI_summary <- data.frame(
- FishROI = sum(sales_data$ROI_fish),
- GarlicROI = sum(sales_data$ROI_garlic),
- Total_ROI = sum(sales_data$Total_ROI),
- Average_Daily_Total_ROI = mean(sales_data$Total_ROI)
+  FishROI = sum(sales_data$ROI_fish),
+  GarlicROI = sum(sales_data$ROI_garlic),
+  Total_ROI = sum(sales_data$Total_ROI),
+  Average_Daily_Total_ROI = mean(sales_data$Total_ROI)
 )
 print(ROI_summary)  
 
@@ -243,10 +294,14 @@ plot(sales_data$date,sales_data$ROI_garlic, type="b",col="red",xlab="Day", ylab=
 plot(sales_data$date,sales_data$Total_ROI, type="b",col="green",xlab="Day", ylab="Total_ROI", main="Daily Total ROI");grid()
 par(mfrow=c(1,1))
 -------------------------------------------------------------------------------------------------------------------------------
-##
+##CAC and LTV probabily in future.
+
+
+-------------------------------------------------------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------------------------------------------------------
 ##
 
--------------------------------------------------------------------------------------------------------------------------------
-##
+
+
+
