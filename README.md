@@ -1,4 +1,4 @@
-## Simulate Data on Lil’ Jar in R Program (code is still under developing)
+## Simulate Data on Lil’ Jar in R Program (code is still under developing) 不定时更新 Updated from time to time
 The data are simulated and not real. The code is provided in the "R Program Code" file along with the necessary explanations. 
 
 The code include revenue, gross profit(include food ingredient expenses), net profit(include operating expenses), return On Investment, mean, standard deviation, summary, hypothesis test, graph & plot, 95% CI, bias, track number of return goods and prediction(poisson distribution).
