@@ -162,7 +162,11 @@ chisq.test(sales_data$jars_garlic)
 ## If p-value < 0.05, reject H0, sales are not uniformly distributed.
 ## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
 -------------------------------------------------------------------------------------------------------------------------------
-##Number of returns on goods (Poisson distribution is being used here because events are independent)
+##Number of returns on goods (~~Poisson distribution is being used here because events are independent~~)
+##The return rate is not constant. Instead, the number of returns depends on the number of items sold on the previous day and the current day.
+##Therefore, a standard Poisson model with a fixed lambda may not be appropriate.
+##A Poisson regression (or another count-based model) that incorporates sales as predictors would likely provide a better fit.
+##In this case, it may also be worth considering alternative distributions (e.g., Negative Binomial) if the data show overdispersion.
   
 lambda_fish <- mean(sales_data$jars_return_fish) ##Average return rate
 lambda_garlic <- mean(sales_data$jars_return_garlic)
