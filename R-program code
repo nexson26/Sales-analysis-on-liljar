@@ -87,7 +87,7 @@ fitted(model)      # same as predicted values ŷ
 resid(model)       # residuals = y - ŷ
 predict(model)     # flexible predictions (for new data too)
 ------------------------------------------------------------------------------------------------------------------------------
-##Model Diagnose - Multiple regression (updating from time to time)
+##Model Diagnose - Multiple regression (updated from time to time)
   
   
   
@@ -171,7 +171,7 @@ chisq.test(sales_data$jars_garlic)
 ##Therefore, a standard Poisson model with a fixed lambda may not be appropriate.
 ##A Poisson regression (or another count-based model) that incorporates sales as predictors would likely provide a better fit.
 ##In this case, it may also be worth considering alternative distributions (e.g., Negative Binomial).
-(updating from time to time, might not use poisson dist. for bottom in future update)
+(updated from time to time, might not use poisson dist. for bottom in future update)
 
 lambda_fish <- mean(sales_data$jars_return_fish) ##Average return rate
 lambda_garlic <- mean(sales_data$jars_return_garlic)
