@@ -87,7 +87,7 @@ fitted(model)      # same as predicted values ŷ
 resid(model)       # residuals = y - ŷ
 predict(model)     # flexible predictions (for new data too)
 ------------------------------------------------------------------------------------------------------------------------------
-##Model Diagnose - Multiple regression
+##Model Diagnose - Multiple regression (updating from time to time)
   
   
   
@@ -166,17 +166,18 @@ chisq.test(sales_data$jars_garlic)
 ##If we reject H0, look at days with higher sales and confirm stock meets peak demand. Plan inventory with focus on high-demand days.
 ##If we fail to reject H0, probabily meaning that sd is not high(not guarantee,so look on your sd and decide). If SD is small, average-based stocking is fine. Still, check maximum sales to set safety stock to prevent occasional shortages. Also, some extreme days can occur so we still need to keep an eye on that. By the way, you can run safety stock formula.
 -------------------------------------------------------------------------------------------------------------------------------
-##Number of returns on goods - [CROSSED OUT] ~~Poisson distribution is being used here because events are independent~~
+##Number of returns on goods - [CROSSED OUT] ~~Poisson distribution is being used here because events are independent~~ 
 ##The return rate is not constant. Instead, the number of returns depends on the number of items sold on the previous day and the current day, it is not independent.
 ##Therefore, a standard Poisson model with a fixed lambda may not be appropriate.
 ##A Poisson regression (or another count-based model) that incorporates sales as predictors would likely provide a better fit.
-##In this case, it may also be worth considering alternative distributions (e.g., Negative Binomial) if the data show overdispersion.
-  
+##In this case, it may also be worth considering alternative distributions (e.g., Negative Binomial).
+(updating from time to time, might not use poisson dist. for bottom in future update)
+
 lambda_fish <- mean(sales_data$jars_return_fish) ##Average return rate
 lambda_garlic <- mean(sales_data$jars_return_garlic)
-dpois(0:10, lambda_fish) ##Prob of the rate getting return with amount 0,...,10 in a day
+dpois(0:10, lambda_fish) ##Computes the probability of each number of returns (0, 1, 2, …, 10) under the Poisson model.
 dpois(0:10, lambda_garlic)
-returns_fish <- rpois(30, lambda_fish) ##Simulate 30 days of returns w/ random distribution, which mean it's used for prediction.
+returns_fish <- rpois(30, lambda_fish) ##Simulates 30 random daily returns from a Poisson distribution with mean
 returns_garlic <- rpois(30, lambda_garlic)
 mean(returns_fish) ##average daily returns observed
 mean(returns_garlic)
@@ -302,7 +303,7 @@ plot(sales_data$date,sales_data$ROI_garlic, type="b",col="red",xlab="Day", ylab=
 plot(sales_data$date,sales_data$Total_ROI, type="b",col="green",xlab="Day", ylab="Total_ROI", main="Daily Total ROI");grid()
 par(mfrow=c(1,1))
 -------------------------------------------------------------------------------------------------------------------------------
-##CAC and LTV probabily in future.
+##CAC and LTV probabily in future. Or maybe not.
 
 
 -------------------------------------------------------------------------------------------------------------------------------
