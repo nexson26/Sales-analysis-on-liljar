@@ -151,7 +151,7 @@ cat("Bias for Jar garlic:", bias_garlic, "\n")
 -------------------------------------------------------------------------------------------------------------------------------
 ## Chi-squared test: Goodness of Fit
 ## H0: Observed sales follow a uniform distribution (no deviation from expected).
-## H1: Observed sales do not follow a uniform distribution.
+## H1: Observed sales do not follow a uniform distribution. 
   
 ##Jar_Fish sales
 chisq.test(sales_data$jars_fish)
@@ -161,6 +161,10 @@ chisq.test(sales_data$jars_garlic)
 
 ## If p-value < 0.05, reject H0, sales are not uniformly distributed.
 ## If p-value ≥ 0.05, fail to reject H0, no evidence against uniform distribution.
+
+##So the result here can help on such as (stock preparation etc):
+##If we reject H0, look at days with higher sales and confirm stock meets peak demand. Plan inventory with focus on high-demand days.
+##If we fail to reject H0, usually/probabily mean sd not high(look on your sd and decide). If SD is small, average-based stocking is fine. Still, check maximum sales to set safety stock to prevent occasional shortages. Also, some extreme days can occur so we still need to keep an eye on that. By the way, you can run safety stock formula.
 -------------------------------------------------------------------------------------------------------------------------------
 ##Number of returns on goods - [CROSSED OUT] ~~Poisson distribution is being used here because events are independent~~
 ##The return rate is not constant. Instead, the number of returns depends on the number of items sold on the previous day and the current day, it is not independent.
